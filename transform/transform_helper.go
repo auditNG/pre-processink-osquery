@@ -18,7 +18,7 @@ func (t TransformHelper) GetStringValue(message string, key string) (string, err
 	end := 0
 
 	if start = strings.Index(data, key); start < 0 {
-		return "", errors.New("Error parsing exit code")
+		return "", errors.New("Error parsing")
 	}
 
 	// Progress the start point beyond the = sign

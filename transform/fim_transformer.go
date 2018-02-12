@@ -4,6 +4,7 @@ import (
   "fmt"
   "os"
   "encoding/json"
+  "strings"
 )
 
 const (
@@ -58,7 +59,7 @@ func (f FIMTransformer) Process(message string, config string, outputFile *os.Fi
   fmt.Println(exitcode)
 
   //Get executable
-  executable, err := transformHelper.GetIntValue(message, "exe=")
+  executable, err := transformHelper.GetStringValue(message, "exe=")
   if nil != err {
     fmt.Println("Unable to get exitcode")
     return nil
@@ -72,13 +73,44 @@ func (f FIMTransformer) Process(message string, config string, outputFile *os.Fi
     return nil
 	}
   fmt.Println(user)
-
-
   return nil
 }
 
-func (f FIMTransformer) isSyscallsInList(syscall int) (bool) {
+func (f FIMTransformer) isUserInWatchList(user int) (bool) {
     return false
+}
+
+
+func (f FIMTransformer) isSyscallInWatchList(syscall int) (bool) {
+  for _, val := range f.confObj.Fim.SyscallList {
+    if (syscall == val) {
+      return true
+    }
+  }
+  return false
+}
+
+func (f FIMTransformer) isFileInWatchList(message string) (bool) {
+  //Get filename
+  transformHelper := NewTransformHelper()
+  for _, val := range f.confObj.Fim.FileList {
+    filename, err := transformHelper.GetStringValue(message, val)
+    if nil != err && "" != filename {
+      fmt.Println("File found")
+      return true
+    }
+  }
+  return false
+}
+
+func (f FIMTransformer) isExeInWatchList(exe string) (bool) {
+  for _, val := range f.confObj.Fim.AppGreylist {
+    if strings.Contains(exe, val) {
+      fmt.Println(val)
+      return true
+    }
+  }
+  return false
 }
 
 func (f FIMTransformer) applyLabelAlgo(syscall int, exitcode int, executable string, user int) {
