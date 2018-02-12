@@ -1,17 +1,9 @@
 {
-  "fim" : {
-    "app_greylist" : [
-      "vim",
-      "cat",
-      "tail",
-      "head",
-      "more",
-      "less",
-      "nano"
-    ],
-    "file_list" : ["key.pem", "server.xml"],
-    "syscall_list" : ["0", "1", "2", "3", "17", "18", "19", "20", "40", "85", "86", "87", "92", "93", "94", "105", "106"],
-    "field_lists" : [
+"fim" : {
+    "AppGreyList" : ["vim","cat","tail","head","more","less","nano"],
+    "FileList" : ["key.pem", "server.xml"],
+    "SyscallList" : ["0", "1", "2", "3", "17", "18", "19", "20", "40", "85", "86", "87", "92", "93", "94", "105", "106"],
+    "FieldLists" : [
       {"pattern" : "syscall=", "type" : "int"},
       {"pattern" : "exit=", "type" : "int"},
       {"pattern" : "exe=", "type" : "string"},
