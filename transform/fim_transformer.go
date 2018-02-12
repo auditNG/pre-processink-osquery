@@ -61,25 +61,29 @@ func (f FIMTransformer) Process(message string, config string, outputFile *os.Fi
   //Get executable
   executable, err := transformHelper.GetStringValue(message, "exe=")
   if nil != err {
-    fmt.Println("Unable to get exitcode")
+    fmt.Println("Unable to get executable")
     return nil
   }
   fmt.Println(executable)
 
   //Get user
-  user, err := transformHelper.GetIntValue(message, "user=")
+  user, err := transformHelper.GetIntValue(message, "uid=")
 	if nil != err {
-		fmt.Println("Unable to get exitcode")
+		fmt.Println("Unable to get user id")
     return nil
 	}
-  fmt.Println(user)
+  fmt.Println("user: " + string(user))
   return nil
 }
 
 func (f FIMTransformer) isUserInWatchList(user int) (bool) {
-    return false
+  for _, val := range f.confObj.Fim.UserList {
+    if (user == val) {
+      return true
+    }
+  }
+  return false
 }
-
 
 func (f FIMTransformer) isSyscallInWatchList(syscall int) (bool) {
   for _, val := range f.confObj.Fim.SyscallList {
