@@ -73,7 +73,23 @@ func (f FIMTransformer) Process(message string, config string, outputFile *os.Fi
     return nil
 	}
   fmt.Println("user: " + string(user))
+
+  //Label this event into RED/YELLOW/GREEN
+  label := f.applyLabelAlgo(message, syscall, exitcode, executable, user)
+
+  outputLine := f.constructOutputLine(syscall, exitcode, executable, user, label)
+
+
+  if _, err := outputFile.Write([]byte(outputLine)); err != nil {
+    fmt.Println("Error weiting line to output file")
+    fmt.Println(err)
+	}
   return nil
+}
+
+func (f FIMTransformer) constructOutputLine(syscall int, exitcode int, executable string, user int, label int) (string) {
+  logLine := []string{string(syscall), string(exitcode), executable, string(user), string(label)}
+  return strings.Join(logLine, ",") + "\n"
 }
 
 func (f FIMTransformer) isUserInWatchList(user int) (bool) {
