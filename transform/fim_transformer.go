@@ -5,6 +5,7 @@ import (
   "os"
   "encoding/json"
   "strings"
+  "strconv"
 )
 
 const (
@@ -88,7 +89,7 @@ func (f FIMTransformer) Process(message string, config string, outputFile *os.Fi
 }
 
 func (f FIMTransformer) constructOutputLine(syscall int, exitcode int, executable string, user int, label int) (string) {
-  logLine := []string{string(syscall), string(exitcode), executable, string(user), string(label)}
+  logLine := []string{strconv.Itoa(syscall), strconv.Itoa(exitcode), executable, strconv.Itoa(user), strconv.Itoa(label)}
   return strings.Join(logLine, ",") + "\n"
 }
 
