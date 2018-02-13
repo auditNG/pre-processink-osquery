@@ -1,10 +1,10 @@
 package transform
 
 import (
-	"os"
 	"fmt"
-	"io/ioutil"
 	"github.com/buger/jsonparser"
+	"io/ioutil"
+	"os"
 )
 
 var spaceChar = byte(' ')
@@ -34,7 +34,7 @@ func (t Transform) Process(input string, outputFile *os.File) error {
 				return
 			}
 			t.processMessage(message, outputFile)
-			if (nil != err) {
+			if nil != err {
 				return
 			}
 
@@ -48,7 +48,7 @@ func (t Transform) processMessage(message string, outputFile *os.File) error {
 	fimTransformer := NewFIMTransformer()
 
 	config, err := ioutil.ReadFile(transformConfigPath)
-	if(err != nil) {
+	if err != nil {
 		fmt.Println("Error reading transform config")
 		return err
 	}

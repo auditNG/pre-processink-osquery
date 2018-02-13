@@ -1,7 +1,7 @@
 package transform
 
 import (
-  "os"
+	"os"
 )
 
 type Transformer interface {

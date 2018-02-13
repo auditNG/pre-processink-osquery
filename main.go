@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"github.com/pre-processink/util"
 	"github.com/pre-processink/source"
 	"github.com/pre-processink/transform"
+	"github.com/pre-processink/util"
+	"os"
 )
 
 func main() {
