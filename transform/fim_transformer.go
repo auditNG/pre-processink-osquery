@@ -117,6 +117,15 @@ func (f FIMTransformer) isExeInWatchList(exe string) (bool) {
   return false
 }
 
-func (f FIMTransformer) applyLabelAlgo(syscall int, exitcode int, executable string, user int) {
+func (f FIMTransformer) applyLabelAlgo(message string, syscall int, exitcode int, executable string, user int) (int) {
 
+  if(f.isFileInWatchList(message) && f.isSyscallInWatchList(syscall) && f.isExeInWatchList(executable) && f.isUserInWatchList(user)) {
+    return RED
+  }
+
+  if(f.isFileInWatchList(message) && f.isSyscallInWatchList(syscall)) {
+    return YELLOW
+  }
+
+  return GREEN
 }
