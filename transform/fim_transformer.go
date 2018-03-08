@@ -44,7 +44,7 @@ func (f FIMTransformer) Process(message string, config string, outputFile *os.Fi
 	transformHelper := NewTransformHelper()
 
 	//Get syscall
-	syscall, err := transformHelper.GetIntValue(message, "syscall=")
+	syscall, err := transformHelper.GetStringValue(message,"name=")
 	if nil != err {
 		fmt.Println("Unable to get syscall")
 		return nil
@@ -52,7 +52,7 @@ func (f FIMTransformer) Process(message string, config string, outputFile *os.Fi
 	fmt.Println(syscall)
 
 	//Get exitcode
-	exitcode, err := transformHelper.GetIntValue(message, "exit=")
+	exitcode, err := transformHelper.GetIntValue(message, "major=")
 	if nil != err {
 		fmt.Println("Unable to get exitcode")
 		return nil
@@ -60,7 +60,7 @@ func (f FIMTransformer) Process(message string, config string, outputFile *os.Fi
 	fmt.Println(exitcode)
 
 	//Get executable
-	executable, err := transformHelper.GetStringValue(message, "exe=")
+	executable, err := transformHelper.GetStringValue(message, "platform=")
 	if nil != err {
 		fmt.Println("Unable to get executable")
 		return nil
@@ -68,12 +68,13 @@ func (f FIMTransformer) Process(message string, config string, outputFile *os.Fi
 	fmt.Println(executable)
 
 	//Get user
-	user, err := transformHelper.GetIntValue(message, "uid=")
+	user, err := transformHelper.GetIntValue(message, "major=")
 	if nil != err {
 		fmt.Println("Unable to get user id")
 		return nil
 	}
-	fmt.Println("user: " + string(user))
+
+	fmt.Println("user: " + strconv.Itoa(user))
 
 	//Label this event into RED/YELLOW/GREEN
 	label := f.applyLabelAlgo(message, syscall, exitcode, executable, user)
@@ -87,8 +88,8 @@ func (f FIMTransformer) Process(message string, config string, outputFile *os.Fi
 	return nil
 }
 
-func (f FIMTransformer) constructOutputLine(syscall int, exitcode int, executable string, user int, label int) string {
-	logLine := []string{strconv.Itoa(syscall), strconv.Itoa(exitcode), executable, strconv.Itoa(user), strconv.Itoa(label)}
+func (f FIMTransformer) constructOutputLine(syscall string, exitcode int, executable string, user int, label int) string {
+	logLine := []string{syscall, strconv.Itoa(exitcode), executable, strconv.Itoa(user), strconv.Itoa(label)}
 	return strings.Join(logLine, ",") + "\n"
 }
 
@@ -101,7 +102,7 @@ func (f FIMTransformer) isUserInWatchList(user int) bool {
 	return false
 }
 
-func (f FIMTransformer) isSyscallInWatchList(syscall int) bool {
+func (f FIMTransformer) isSyscallInWatchList(syscall string) bool {
 	for _, val := range f.confObj.Fim.SyscallList {
 		if syscall == val {
 			return true
@@ -113,9 +114,10 @@ func (f FIMTransformer) isSyscallInWatchList(syscall int) bool {
 func (f FIMTransformer) isFileInWatchList(message string) bool {
 	//Get filename
 	transformHelper := NewTransformHelper()
-	for _, val := range f.confObj.Fim.FileList {
+	for _, val := range f.confObj.Fim.FileList{
+
 		filename, err := transformHelper.GetStringValue(message, val)
-		if nil != err && "" != filename {
+		if nil == err && "" != filename {
 			fmt.Println("File found")
 			return true
 		}
@@ -133,13 +135,15 @@ func (f FIMTransformer) isExeInWatchList(exe string) bool {
 	return false
 }
 
-func (f FIMTransformer) applyLabelAlgo(message string, syscall int, exitcode int, executable string, user int) int {
+func (f FIMTransformer) applyLabelAlgo(message string, syscall string, exitcode int, executable string, user int) int {
 
 	if f.isFileInWatchList(message) && f.isSyscallInWatchList(syscall) && f.isExeInWatchList(executable) && f.isUserInWatchList(user) {
+		fmt.Println("RED")
 		return RED
 	}
 
 	if f.isFileInWatchList(message) && f.isSyscallInWatchList(syscall) {
+		fmt.Println("Yellow")
 		return YELLOW
 	}
 
