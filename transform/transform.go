@@ -5,9 +5,10 @@ import (
 	"github.com/buger/jsonparser"
 	"io/ioutil"
 	"os"
+	"strings"
 )
 
-var spaceChar = byte(' ')
+var spaceChar = byte('\n')
 var transformConfigPath = string("./transform/transform_config.json")
 
 func NewTransform() Transform {
@@ -22,12 +23,6 @@ func (t Transform) Process(input string, outputFile *os.File) error {
 
 	jsonparser.ArrayEach([]byte(input),
 		func(actVal []byte, _ jsonparser.ValueType, _ int, err error) {
-			// machine_serial_number, err := jsonparser.GetString(actVal, "_source", "machine_serial_number")
-			// if err != nil {
-			// 	fmt.Println("JSON parsing error: ", err)
-			// 	return
-			// }
-			//fmt.Println("timestamp: " + machine_serial_number)
 			var message=string("")
 			// jsonparser.ArrayEach(actVal, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
 			// 	name,err:= jsonparser.GetString(value, "[1]")
@@ -36,21 +31,23 @@ func (t Transform) Process(input string, outputFile *os.File) error {
 			// 		}, "_source", "osquery_distributed_query_result","result")
 
 
-					jsonparser.ObjectEach(actVal, func(key []byte, value []byte, dataType jsonparser.ValueType, offset int) error {
-        //fmt.Printf("Key: '%s ' Value: '%s '\n", string(key), string(value))
-				message=message+string(key)+"="+string(value)+" "
-
+			jsonparser.ObjectEach(actVal, func(key []byte, value []byte, dataType jsonparser.ValueType, offset int) error {
+      	//fmt.Printf("Key: '%s ' Value: '%s '\n", string(key), string(value))
+				message=message+string(key)+"="+string(value)+"\n"
 				return nil
 					}, "_source", "osquery_distributed_query_result","result","[0]")
+			//fmt.Println(message)
+			t.extractMessage(message,outputFile)
+			t.processMessage(message, outputFile)
 
-					//fmt.Println(message)
+
 			// calendarTime, err := jsonparser.GetString(actVal, "_source", "osquery_distributed_query_result","result","[0]")
 			// if err != nil {
 			// 	fmt.Println("JSON parsing error: ", err)
 			// 	return
 			// }
 			// fmt.Println(calendarTime)
-			 t.processMessage(message, outputFile)
+
 			// if nil != err {
 			// 	return
 			// }
@@ -58,6 +55,13 @@ func (t Transform) Process(input string, outputFile *os.File) error {
 		}, "hits", "hits")
 
 	return nil
+}
+func (t Transform) extractMessage(message string,outputFile *os.File) ([]string,error){
+	//var content []string =strings.Fields(message)
+	var content []string =strings.Split(message,"\n")
+	fmt.Println("In extract message")
+	fmt.Println(content[0],content[1])
+	return content,nil
 }
 
 func (t Transform) processMessage(message string, outputFile *os.File) error {
