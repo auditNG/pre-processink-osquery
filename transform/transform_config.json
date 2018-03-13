@@ -6,9 +6,9 @@
     "UserList" : [500, 1000],
     "FieldLists" : [
       {"pattern" : "syscall=", "type" : "string"},
-      {"pattern" : "exit=", "type" : "int"},
+      {"pattern" : "exit=", "type" : "string"},
       {"pattern" : "exe=", "type" : "string"},
-      {"pattern" : "user=", "type" : "int"}
+      {"pattern" : "user=", "type" : "string"}
     ]
   }
 }
