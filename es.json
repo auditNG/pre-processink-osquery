@@ -1,6 +1,6 @@
 {
     "es_config" : {
     "uri" : "http://172.30.124.75:9200/zentral-events/_search?pretty&filter_path=hits.hits._source",
-    "payload" : "{\r\n\t\"query\" : {\"term\": {\r\n\t\"osquery_distributed_query_result.probe.id\" : \"8\"}  \t}\r\n }\r\n"
+    "payload" : "{\r\n\t\"query\" : {\"term\": {\r\n\t\"osquery_distributed_query_result.probe.id\" : \"3\"}  \t}\r\n }\r\n"
   }
 }
