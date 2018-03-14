@@ -20,29 +20,20 @@ type Transform struct {
 
 func (t Transform) Process(input string, outputFile *os.File) error {
 
-var message=string("")
+
+
+var test []byte
+var name=string("")
 	jsonparser.ArrayEach([]byte(input),
 		func(actVal []byte, _ jsonparser.ValueType, _ int, err error) {
-
-			jsonparser.ArrayEach(actVal, func(value []byte, dataType jsonparser.ValueType, offset int,err error)  {
-				//fmt.Println(message[i])
-				jsonparser.ObjectEach(value,func(key []byte, pair []byte, dataType jsonparser.ValueType, offset int) error{
-					message=message+string(key)+"="+string(pair)+"\n"
-
-					return nil
-				})
-			
-
-
-					}, "_source", "osquery_distributed_query_result","result")
-					fmt.Println(message)
-
+		 test,_,_,err=jsonparser.Get(actVal,"_source", "osquery_distributed_query_result","probe","name")
+			 name=name+string(test)+"\n"
 		}, "hits","hits")
-	t.processMessage(message,outputFile)
+	t.processMessage(input,name,outputFile)
 	return nil
 }
 
-func (t Transform) processMessage(message string, outputFile *os.File) error {
+func (t Transform) processMessage(input string,test string, outputFile *os.File) error {
 
 	fimTransformer := NewFIMTransformer()
 
@@ -51,7 +42,7 @@ func (t Transform) processMessage(message string, outputFile *os.File) error {
 		fmt.Println("Error reading transform config")
 		return err
 	}
-	fimTransformer.Process(message, string(config), outputFile)
+	fimTransformer.Process(input,test, string(config), outputFile)
 
 	return nil
 }
