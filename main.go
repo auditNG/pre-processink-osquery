@@ -10,7 +10,7 @@ import (
 
 func main() {
 	// Get the output file path from command line argument
-	cmdLine := util.NewCmdLine()
+	cmdLine := util.NewCmdLine("output")
 	outputPath := cmdLine.GetOutputPath()
 	outputFile, err := os.OpenFile(outputPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 

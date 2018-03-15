@@ -4,8 +4,8 @@ import (
 	"flag"
 )
 
-func NewCmdLine() CmdLine {
-	output := flag.String("output", "./output.csv", "File to dump the transformed output.")
+func NewCmdLine(file string) CmdLine {
+	output := flag.String("output", "./"+file+".csv", "File to dump the transformed output.")
 	c := new(CmdLine)
 	c.outputPath = *output
 	return *c
