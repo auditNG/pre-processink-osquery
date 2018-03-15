@@ -78,7 +78,7 @@ func (f FIMTransformer) parseAndWrite(input string,outputFile *os.File,test stri
 	}, "hits","hits")
 		return nil
 }
-func (f FIMTransformer) applyRules(input string,test string){
+func (f FIMTransformer) applyRules(input string,test string,outputFile *os.File){
 	var message=string("")
 	var check []byte
 	jsonparser.ArrayEach([]byte(input),
