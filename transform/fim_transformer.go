@@ -79,13 +79,8 @@ func (f FIMTransformer) parseAndWrite(input string,outputFile *os.File,test stri
 	}, "hits","hits")
 		return nil
 }
-<<<<<<< HEAD
 func (f FIMTransformer) applyRules(input string,test string,outputFile *os.File){
 	var message=string("")
-=======
-func (f FIMTransformer) applyRules(input string, test string) {
-	var message = string("")
->>>>>>> 01e7799e48c1e9feb1afe40bd4c190f86faa3991
 	var check []byte
 	jsonparser.ArrayEach([]byte(input),
 		func(actVal []byte, _ jsonparser.ValueType, _ int, err error) {
@@ -107,8 +102,5 @@ func (f FIMTransformer) applyRules(input string, test string) {
 			}
 			}, "hits","hits")
 
-				}, "_source", "osquery_distributed_query_result", "result")
 
-			}
-		}, "hits", "hits")
 }
