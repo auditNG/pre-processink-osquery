@@ -3,8 +3,9 @@ package transform
 import (
 	"encoding/json"
 	"fmt"
-	"os"
 	"github.com/buger/jsonparser"
+	"os"
+	// "strconv"
 	"strings"
 )
 
@@ -32,7 +33,7 @@ func (f FIMTransformer) Init(config string) error {
 	return err
 }
 
-func (f FIMTransformer) Process(input string,test string,config string, outputFile *os.File) error {
+func (f FIMTransformer) Process(input string, test string, config string, outputFile *os.File) error {
 	err := f.Init(config)
 	if err != nil {
 		fmt.Println(err)
@@ -78,16 +79,21 @@ func (f FIMTransformer) parseAndWrite(input string,outputFile *os.File,test stri
 	}, "hits","hits")
 		return nil
 }
+<<<<<<< HEAD
 func (f FIMTransformer) applyRules(input string,test string,outputFile *os.File){
 	var message=string("")
+=======
+func (f FIMTransformer) applyRules(input string, test string) {
+	var message = string("")
+>>>>>>> 01e7799e48c1e9feb1afe40bd4c190f86faa3991
 	var check []byte
 	jsonparser.ArrayEach([]byte(input),
 		func(actVal []byte, _ jsonparser.ValueType, _ int, err error) {
-			check,_,_,err=jsonparser.Get(actVal,"_source", "osquery_distributed_query_result","probe","name")
-			if string(check)==test{
-				jsonparser.ArrayEach(actVal, func(value []byte, dataType jsonparser.ValueType, offset int,err error)  {
-					jsonparser.ObjectEach(value,func(key []byte, pair []byte, dataType jsonparser.ValueType, offset int) error{
-						message=message+string(key)+"="+string(pair)+"\n"
+			check, _, _, err = jsonparser.Get(actVal, "_source", "osquery_distributed_query_result", "probe", "name")
+			if string(check) == test {
+				jsonparser.ArrayEach(actVal, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
+					jsonparser.ObjectEach(value, func(key []byte, pair []byte, dataType jsonparser.ValueType, offset int) error {
+						message = message + string(key) + "=" + string(pair) + "\n"
 
 						return nil
 					})
@@ -100,4 +106,9 @@ func (f FIMTransformer) applyRules(input string,test string,outputFile *os.File)
 
 			}
 			}, "hits","hits")
+
+				}, "_source", "osquery_distributed_query_result", "result")
+
+			}
+		}, "hits", "hits")
 }
