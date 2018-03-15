@@ -1,4 +1,5 @@
 {
+
 	"Transform_config": [{
       "Name": "Outbound connection to non PCI",
 			"Probe_name": "outbound_pci_connections",
@@ -13,6 +14,5 @@
       "Name": "yum outdated rpms",
       "Probe_name": "Outdated rpms",
 			"Rule": "yum-security(packages, CRITICAL) > 1"
-		}
-	]
-}
+    }]
+                       }

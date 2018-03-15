@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
-
 )
 
 var spaceChar = byte('\n')
@@ -33,8 +32,7 @@ jsonparser.ArrayEach([]byte(input),
 	t.processMessage(input,name,outputFile)
 	return nil
 }
-
-func (t Transform) processMessage(input string,test string, outputFile *os.File) error {
+func (t Transform) processMessage(input string, test string, outputFile *os.File) error {
 	fimTransformer := NewFIMTransformer()
 	config, err := ioutil.ReadFile(transformConfigPath)
 	if err != nil {
