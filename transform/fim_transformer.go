@@ -33,16 +33,16 @@ func (f FIMTransformer) Init(config string) error {
 	return err
 }
 
-func (f FIMTransformer) Process(input string, test string, config string, outputFile *os.File) error {
+func (f FIMTransformer) Process(input string, test string, config string) error {
 	err := f.Init(config)
 	if err != nil {
 		fmt.Println(err)
 		return nil
 	}
-	f.istestInWatchList(input,test,outputFile)
+	f.istestInWatchList(input,test)
 	return nil
 }
-func (f FIMTransformer) istestInWatchList(input string,test string,outputFile *os.File) {
+func (f FIMTransformer) istestInWatchList(input string,test string) {
 	var configprobe=string("")
 	for _,val := range f.confObj.Transform_config {
 			configprobe=configprobe+val.Probe_name+"\n"
@@ -51,27 +51,42 @@ func (f FIMTransformer) istestInWatchList(input string,test string,outputFile *o
 	for _,val:=range esprobe{
 		var check=strings.Contains(configprobe,val)
 		if  check==true{
-			f.applyRules(input,val,outputFile)
+			f.applyRules(input,val)
 		} else {
-			f.parseAndWrite(input,outputFile,val)
+			f.parseAndWrite(input,val)
 		}
 	}
 }
-func (f FIMTransformer) parseAndWrite(input string,outputFile *os.File,test string) error {
+func (f FIMTransformer) parseAndWrite(input string,test string) error {
 	var message=string("")
+	var fields=string("")
+	var fcheck=true
 	var check []byte
 	jsonparser.ArrayEach([]byte(input),
 		func(actVal []byte, _ jsonparser.ValueType, _ int, err error) {
 			check,_,_,err=jsonparser.Get(actVal,"_source", "osquery_distributed_query_result","probe","name")
 			if string(check)==test{
+				f, err :=os.OpenFile(test+".csv", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+				if err!=nil{
+					fmt.Println("Error: ", err)
+        return
+				}
 				jsonparser.ArrayEach(actVal, func(value []byte, dataType jsonparser.ValueType, offset int,err error)  {
 					jsonparser.ObjectEach(value,func(key []byte, pair []byte, dataType jsonparser.ValueType, offset int) error{
 						message=message+string(pair)+"\n"
+						fields=fields+string(key)+"\n"
 						return nil
 					})
+				if fcheck==true{
+					var fieldName=strings.Join(strings.Split(fields,"\n"),",")+"\n"
+					if _,err:=f.Write([]byte(fieldName));err!=nil{
+					 fmt.Println("Error writing line to output file")
+			 	 	}
+					fcheck=false
+				}
 				var outputLine=strings.Join(strings.Split(message,"\n"), ",") + "\n"
-				if _,err:=outputFile.Write([]byte(outputLine));err!=nil{
-				 fmt.Println("Error weiting line to output file")
+				if _,err:=f.Write([]byte(outputLine));err!=nil{
+				 fmt.Println("Error writing line to output file")
 		 	 	}
 				message=""
 				}, "_source", "osquery_distributed_query_result","result")
@@ -79,28 +94,43 @@ func (f FIMTransformer) parseAndWrite(input string,outputFile *os.File,test stri
 	}, "hits","hits")
 		return nil
 }
-func (f FIMTransformer) applyRules(input string,test string,outputFile *os.File){
+func (f FIMTransformer) applyRules(input string,test string){
 	var message=string("")
+	var fields=string("")
+	var fcheck=true
 	var check []byte
 	jsonparser.ArrayEach([]byte(input),
 		func(actVal []byte, _ jsonparser.ValueType, _ int, err error) {
 			check, _, _, err = jsonparser.Get(actVal, "_source", "osquery_distributed_query_result", "probe", "name")
 			if string(check) == test {
+				f, err :=os.OpenFile(test+".csv", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+				if err!=nil{
+					fmt.Println("Error: ", err)
+        return
+				}
 				jsonparser.ArrayEach(actVal, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
 					jsonparser.ObjectEach(value, func(key []byte, pair []byte, dataType jsonparser.ValueType, offset int) error {
-						message = message + string(key) + "=" + string(pair) + "\n"
-
+						message = message + string(pair) + "\n"
+						fields=fields+string(key)+"\n"
 						return nil
 					})
+					if fcheck==true{
+						var fieldName=strings.Join(strings.Split(fields,"\n"),",")+"\n"
+						if _,err:=f.Write([]byte(fieldName));err!=nil{
+						 fmt.Println("Error writing line to output file")
+				 	 	}
+						fcheck=false
+					}
 					var outputLine=strings.Join(strings.Split(message,"\n"), ",") + "\n"
-					if _,err:=outputFile.Write([]byte(outputLine));err!=nil{
-					 fmt.Println("Error weiting line to output file")
+					if _,err:=f.Write([]byte(outputLine));err!=nil{
+					 fmt.Println("Error writing line to output file")
 				 }
 				 message=""
 						}, "_source", "osquery_distributed_query_result","result")
 
 			}
 			}, "hits","hits")
+
 
 
 }
