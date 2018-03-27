@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/buger/jsonparser"
 	"io/ioutil"
-	"os"
 	"strings"
 )
 
@@ -18,7 +17,7 @@ func NewTransform() Transform {
 type Transform struct {
 }
 
-func (t Transform) Process(input string, outputFile *os.File) error {
+func (t Transform) Process(input string) error {
 var test []byte
 var name=string("")
 jsonparser.ArrayEach([]byte(input),
@@ -29,16 +28,16 @@ jsonparser.ArrayEach([]byte(input),
 				name=name+string(test)+"\n"
 			}
 		}, "hits","hits")
-	t.processMessage(input,name,outputFile)
+	t.processMessage(input,name)
 	return nil
 }
-func (t Transform) processMessage(input string, test string, outputFile *os.File) error {
+func (t Transform) processMessage(input string, test string) error {
 	fimTransformer := NewFIMTransformer()
 	config, err := ioutil.ReadFile(transformConfigPath)
 	if err != nil {
 		fmt.Println("Error reading transform config")
 		return err
 	}
-	fimTransformer.Process(input,test, string(config), outputFile)
+	fimTransformer.Process(input,test, string(config))
 	return nil
 }
