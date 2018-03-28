@@ -1,18 +1,18 @@
 {
-	"transform_config": [{
-      "name": "Outbound connection to non PCI",
-			"probe_name": "outbound_pci_connections",
-			"rule": "(true != IPInSubnet(remote_address, 10.10.10.0/24)) && (remote_address != IPInSubnet(remote_address, 11.11.11.0/24)) && (true != IPInSubnet(ipaddr, 12.12.12.0/24))"
+
+	"Transform_config": [{
+      "Name": "Outbound connection to non PCI",
+			"Probe_name": "outbound_pci_connections",
+			"Rule": "(true != IPSubnet(10.10.10.0/24)) && (true != IPSubnet(11.11.11.0/24)) && (true != IPSubnet(12.12.12.0/24))"
 		},
 		{
-      "name": "Outdated OS",
-      "probe_name": "outdate_kernel",
-			"rule": "if (platform == \"centos\" && major < \"7\")"
+      "Name": "Outdated OS",
+      "Probe_name": "outdate_kernel",
+			"Rule": "if (platform == \"centos\" && major < \"7\")"
 		},
 		{
-      "name": "yum outdated rpms",
-      "probe_name": "Outdated rpms",
-			"rule": "yum-security(packages, CRITICAL) > 1"
-		}
-	]
+      "Name": "yum outdated rpms",
+      "Probe_name": "Outdated rpms",
+			"Rule": "yum-security(packages, CRITICAL) > 1"
+    }]
 }

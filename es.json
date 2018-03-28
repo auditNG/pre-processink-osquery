@@ -1,6 +1,6 @@
 {
     "es_config" : {
-    "uri" : "http://172.30.124.75:9200/zentral-events/_search?pretty&filter_path=hits.hits._source",
-    "payload" : "{\r\n\t\"query\" : {\"exists\": {\r\n\t\"field\" : \"osquery_distributed_query_result\"}  \t}\r\n }\r\n"
+    "uri" : "http://172.30.122.215:9200/zentral-events/_search?pretty&filter_path=hits.hits._source",
+    "payload" : "{\r\n\t\"query\" : {\"bool\": {\r\n\t\"must\" :[ {\"match\" :{\"osquery_distributed_query_result.error\":\"false\"}}],\"filter\":{\"range\":{\"created_at\":{\"gt\":\"now-1d/d\",\"lte\":\"now/d\"}}}  \t}\r\n }\r\n}"
   }
 }
