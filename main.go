@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/pre-processink/source"
-	"github.com/pre-processink/transform"
+	"github.com/pre-processink-osquery/source"
+	"github.com/pre-processink-osquery/transform"
 )
 
 func main() {
