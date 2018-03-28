@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/pre-processink/util"
+	"github.com/pre-processink-osquery/util"
 )
 
 func NewESSource() Source {

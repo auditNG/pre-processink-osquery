@@ -30,6 +30,7 @@ func (f FIMTransformer) Init(config string) error {
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	return err
 }
 
@@ -62,6 +63,7 @@ func (f FIMTransformer) parseAndWrite(input string,test string) error {
 	var fields=string("")
 	var fcheck=true
 	var check []byte
+	d :=NewDataMapper()
 	jsonparser.ArrayEach([]byte(input),
 		func(actVal []byte, _ jsonparser.ValueType, _ int, err error) {
 			check,_,_,err=jsonparser.Get(actVal,"_source", "osquery_distributed_query_result","probe","name")
@@ -83,15 +85,20 @@ func (f FIMTransformer) parseAndWrite(input string,test string) error {
 					 fmt.Println("Error writing line to output file")
 			 	 	}
 					fcheck=false
+
 				}
 				var outputLine=strings.Join(strings.Split(message,"\n"), ",") + "\n"
+
+				d.mapper(message,fields)
 				if _,err:=f.Write([]byte(outputLine));err!=nil{
 				 fmt.Println("Error writing line to output file")
 		 	 	}
 				message=""
+				fields=""
 				}, "_source", "osquery_distributed_query_result","result")
 		 }
 	}, "hits","hits")
+
 		return nil
 }
 func (f FIMTransformer) applyRules(input string,test string){
@@ -122,6 +129,8 @@ func (f FIMTransformer) applyRules(input string,test string){
 						fcheck=false
 					}
 					var outputLine=strings.Join(strings.Split(message,"\n"), ",") + "\n"
+					// d :=NewDataMapper()
+					// d.mapper(message,fields)
 					if _,err:=f.Write([]byte(outputLine));err!=nil{
 					 fmt.Println("Error writing line to output file")
 				 }
@@ -130,7 +139,5 @@ func (f FIMTransformer) applyRules(input string,test string){
 
 			}
 			}, "hits","hits")
-
-
 
 }
