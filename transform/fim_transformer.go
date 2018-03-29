@@ -88,7 +88,6 @@ func (f FIMTransformer) parseAndWrite(input string,test string) error {
 
 				}
 				var outputLine=strings.Join(strings.Split(message,"\n"), ",") + "\n"
-
 				d.mapper(message,fields)
 				if _,err:=f.Write([]byte(outputLine));err!=nil{
 				 fmt.Println("Error writing line to output file")
