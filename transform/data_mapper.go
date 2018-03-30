@@ -48,13 +48,13 @@ func (d DataMapper) mapper(input string,field string) {
 if err!=nil{
   fmt.Println("Data not saved")
 }
-err=db.View(func(tx *bolt.Tx)error{
-var i int
-b:=tx.Bucket([]byte("features"))
-for i=0;i<len(fields);i++{
-  fmt.Println(data[i],string(b.Get([]byte(data[i]))))
-}
-return nil
-})
+// err=db.View(func(tx *bolt.Tx)error{
+// var i int
+// b:=tx.Bucket([]byte("features"))
+// for i=0;i<len(fields);i++{
+//   fmt.Println(data[i],string(b.Get([]byte(data[i]))))
+// }
+// return nil
+// })
 db.Close()
 }

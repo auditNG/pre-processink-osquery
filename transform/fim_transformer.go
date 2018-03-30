@@ -80,14 +80,19 @@ func (f FIMTransformer) parseAndWrite(input string,test string) error {
 						return nil
 					})
 				if fcheck==true{
-					var fieldName=strings.Join(strings.Split(fields,"\n"),",")+"\n"
+					var fieldName=strings.Join(strings.Split(fields,"\n"),",")
+					fieldName=strings.TrimRight(fieldName,",")
+					fieldName=fieldName+"\n"
 					if _,err:=f.Write([]byte(fieldName));err!=nil{
 					 fmt.Println("Error writing line to output file")
 			 	 	}
 					fcheck=false
 
 				}
-				var outputLine=strings.Join(strings.Split(message,"\n"), ",") + "\n"
+				var outputLine=strings.Join(strings.Split(message,"\n"), ",")
+				outputLine=strings.TrimRight(outputLine,",")
+				outputLine=outputLine+"\n"
+				fmt.Println(outputLine)
 				d.mapper(message,fields)
 				if _,err:=f.Write([]byte(outputLine));err!=nil{
 				 fmt.Println("Error writing line to output file")
