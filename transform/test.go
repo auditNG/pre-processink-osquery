@@ -98,18 +98,11 @@ func main() {
     }
 	}
      write.Write([]byte(fieldNames))
-
-//   var space int
-//   space=0
-//   var temp int
-//   temp=0
    for _,val:=range files{
    read,_:=os.OpenFile(val,os.O_RDONLY,0644)
    reader:=csv.NewReader(read)
    record,_:=reader.ReadAll()
-//   for i:=0;i<space;i++{
-//     fieldNames=fieldNames+","
-//   }
+
    for rno,rows:=range record{
      if rno==0{
        continue
