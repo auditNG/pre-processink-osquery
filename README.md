@@ -1,1 +1,2 @@
-# preprocessink
+# Pre-processink-osquery
+Pre-processink-osquery is a preprocessing toolkit that helps transform osquery events on a fleet manager, into a machine learning training data set. It transforms data in multiple stages, allowing for automated rules based labelling and manual human labelling. Both kinds of labelling are necessary to cover different use cases and still not make the labelling overwhelming to the administrators.
