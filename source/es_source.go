@@ -31,6 +31,7 @@ func (es ESSource) Fetch() (string, error) {
 		return "", err
 	}
 
+
 	body, err := jsonparser.GetString(config, "es_config", "payload")
 	if err != nil {
 		fmt.Println("Error parsing config: ", err)
