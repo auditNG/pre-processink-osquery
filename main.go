@@ -19,6 +19,8 @@ func main() {
 	var t transform.Transform = transform.NewTransform()
 	err = t.Process(result)
 
+	// err=t.ProcessMeta(result)
+
 	if err != nil {
 		fmt.Println("Error fetching from source")
 		return

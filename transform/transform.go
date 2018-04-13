@@ -17,6 +17,21 @@ func NewTransform() Transform {
 type Transform struct {
 }
 
+func(t Transform) ProcessMeta(input string) error{
+	jsonparser.ArrayEach([]byte(input),func(actVal []byte, _ jsonparser.ValueType, _ int,err error){
+		created_at,_:=jsonparser.GetString(actVal, "_source", "created_at")
+		ip,_:=jsonparser.GetString(actVal, "_source", "request","ip")
+		msn,_:=jsonparser.GetString(actVal,"_source","machine_serial_number")
+		jsonparser.ArrayEach(actVal, func(value []byte, _ jsonparser.ValueType, _ int,err error)  {
+		jsonparser.ObjectEach(value,func(key []byte, pair []byte, dataType jsonparser.ValueType, offset int) error{
+		fmt.Println(string(pair))
+		return nil
+		})
+	},"_source","machine","meta_business_units")
+		fmt.Println(created_at,ip,msn)
+	},"hits","hits")
+	return nil
+}
 func (t Transform) Process(input string) error {
 var test []byte
 var name=string("")

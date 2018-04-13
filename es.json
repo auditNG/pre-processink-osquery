@@ -1,6 +1,6 @@
 {
     "es_config" : {
-    "uri" : "http://172.30.126.79:9200/zentral-events/_search?pretty&filter_path=hits.hits._source",
-    "payload" : "{\r\n\t\"query\" : {\"bool\": {\r\n\t\"must\" :[ {\"match\" :{\"osquery_distributed_query_result.error\":\"false\"}}],\"filter\":{\"range\":{\"created_at\":{\"gt\":\"now-1d/d\",\"lte\":\"now/d\"}}}  \t}\r\n }\r\n}"
+    "uri" : "http://172.30.92.50:9200/zentral-events/_search",
+    "payload" : "{\r\n\t\"query\" : {\"bool\": {\r\n\t\"must\" :[ {\"match\" :{\"osquery_distributed_query_result.error\":\"false\"}}],\"filter\":{\"range\":{\"created_at\":{\"gte\":\"2018-04-11\",\"lt\":\"2018-04-12\"}}}  \t}\r\n },\"size\":3000\r\n}"
   }
 }
