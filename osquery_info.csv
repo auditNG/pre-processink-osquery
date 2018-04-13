@@ -1,2 +1,0 @@
-pid,uuid,instance_id,version,config_hash,config_valid,extensions,build_platform,build_distro,start_time,watcher
-14755,E8A46C1B-490A-568B-ABC5-DB20FE594281,2b1d56b7-ca3a-4f7f-9867-9175c8d18ec4,3.1.0,8ee8918b534592a754d17839844e2b09082a4463,1,active,darwin,10.12,1522387556,14754
