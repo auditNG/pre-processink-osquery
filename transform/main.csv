@@ -1,4 +1,0 @@
-version,arguments,path,device,pid,uuid,instance_id,config_hash,config_valid,extensions,build_platform,build_distro,start_time,watcher
-16.7.0, ,/System/Library/PrelinkedKernels/prelinkedkernel,9DB77CAA-8BE2-4829-9CB0-00180E8B0B43
-16.7.0, ,/System/Library/PrelinkedKernels/prelinkedkernel,9DB77CAA-8BE2-4829-9CB0-00180E8B0B43
-3.1.0,,,,14755,E8A46C1B-490A-568B-ABC5-DB20FE594281,2b1d56b7-ca3a-4f7f-9867-9175c8d18ec4,8ee8918b534592a754d17839844e2b09082a4463,1,active,darwin,10.12,1522387556,14754
